@@ -37,6 +37,20 @@ class TestBBCGoodFoodParser:
         assert "Mix the filling ingredients together." in directions[1]
         assert "Sift the icing sugar into a large bowl" in directions[2]
 
+    def test_it_parses_the_ingredients(self, bbc_good_food_parser):
+        ingredient_containers = bbc_good_food_parser.get_ingredients()
+        fillings = ingredient_containers['For the filling']
+        assert len(ingredient_containers) == 3
+        assert '' in ingredient_containers
+        assert 'For the filling' in ingredient_containers
+        assert 'For the icing' in ingredient_containers
+        assert len(fillings) == 4
+        assert '1 tsp ground cinnamon' in fillings
+        assert '55g light brown soft sugar' in fillings
+        assert '2 tbsp caster sugar' in fillings
+        assert '40g butter, melted' in fillings
+
+
 
 @pytest.fixture
 def bbc_good_food_parser(bbc_good_food_document, bbc_good_food_url, mocker):

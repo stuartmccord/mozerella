@@ -57,3 +57,14 @@ class BBCGoodFoodParser(Parser):
     def get_directions(self):
         method = self.get_parser_engine().select('#recipe-method ol.method__list li.method__item > p')
         return [item.get_text().lstrip().rstrip() for item in method]
+
+    def get_ingredients(self):
+        ingredients = self.get_parser_engine().select('.ingredients-list__content > *')
+        groups = {}
+        current_group = ""
+        for ingredient in ingredients:
+            if 'ingredients-list__group-title' in ingredient.attrs['class']:
+                current_group = ingredient.get_text()
+            if 'ingredients-list__group' in ingredient.attrs['class']:
+                groups[current_group] = [item.attrs['content'] for item in ingredient.find_all('li', class_='ingredients-list__item')]
+        return groups
