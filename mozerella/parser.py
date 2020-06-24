@@ -26,6 +26,19 @@ class Parser(object):
 
 
 class BBCGoodFoodParser(Parser):
+    class Ingredient(object):
+        def __init__(self, raw):
+            self.raw = raw
+            self.amount, self.unit, self.ingredient = re.match(r'(?:^(¼|½|¾|[0-9]*) ?(g|tbsp|tsp|ml)?) (.*)', self.raw).groups()
+
+        def to_dict(self):
+            return {
+                'raw': self.raw,
+                'amount': self.amount,
+                'unit': self.unit,
+                'ingredient': self.ingredient
+            }
+
     def __init__(self, url):
         super().__init__(url)
         self.parser_engine = None
@@ -66,5 +79,8 @@ class BBCGoodFoodParser(Parser):
             if 'ingredients-list__group-title' in ingredient.attrs['class']:
                 current_group = ingredient.get_text()
             if 'ingredients-list__group' in ingredient.attrs['class']:
-                groups[current_group] = [item.attrs['content'] for item in ingredient.find_all('li', class_='ingredients-list__item')]
+                groups[current_group] = [
+                    self.Ingredient(item.attrs['content']).to_dict()
+                    for item in ingredient.find_all('li', class_='ingredients-list__item')
+                ]
         return groups

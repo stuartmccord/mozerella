@@ -45,11 +45,12 @@ class TestBBCGoodFoodParser:
         assert 'For the filling' in ingredient_containers
         assert 'For the icing' in ingredient_containers
         assert len(fillings) == 4
-        assert '1 tsp ground cinnamon' in fillings
-        assert '55g light brown soft sugar' in fillings
-        assert '2 tbsp caster sugar' in fillings
-        assert '40g butter, melted' in fillings
-
+        assert fillings == [
+            {'raw': '1 tsp ground cinnamon', 'amount': '1', 'unit': 'tsp', 'ingredient': 'ground cinnamon'},
+            {'raw': '55g light brown soft sugar', 'amount': '55', 'unit': 'g', 'ingredient': 'light brown soft sugar'},
+            {'raw': '2 tbsp caster sugar', 'amount': '2', 'unit': 'tbsp', 'ingredient': 'caster sugar'},
+            {'raw': '40g butter, melted', 'amount': '40', 'unit': 'g', 'ingredient': 'butter, melted'},
+        ]
 
 
 @pytest.fixture
